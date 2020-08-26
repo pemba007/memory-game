@@ -2,7 +2,7 @@ import Head from "next/head";
 
 import Login from "../src/containers/Login";
 import Game from "../src/containers/Game";
-import Button from "@material-ui/core/Button";
+
 import ThemeToggle from "../src/components/ThemeToggle";
 
 export default function Home(props) {
@@ -22,10 +22,20 @@ export default function Home(props) {
           display: "grid",
           placeItems: "center",
           width: "100%",
-          height: "100vh",
+          minHeight: "100vh",
         }}
       >
-        {gameMode ? <Game /> : <Login />}
+        {gameMode ? (
+          <Game logOut={() => setGameMode(false)} user={userInfo} />
+        ) : (
+          <Login
+            openGame={() => gameMode(true)}
+            setUserInfo={(user) => {
+              setUserInfo(user);
+              setGameMode(true);
+            }}
+          />
+        )}
       </main>
     </>
   );

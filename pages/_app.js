@@ -2,6 +2,8 @@ import "../src/styles/index.css";
 import NProgress from "nprogress";
 import Router from "next/router";
 
+import { AnimatePresence } from "framer-motion";
+
 import React, { useState } from "react";
 // import {
 //   createMuiTheme,
@@ -27,6 +29,9 @@ export default function MyApp({ Component, pageProps }) {
   const darkTheme = createMuiTheme({
     palette: {
       type: palletType,
+      text: {
+        // primary: "#000",
+      },
     },
   });
   const _handleThemeChange = () => {
@@ -35,10 +40,19 @@ export default function MyApp({ Component, pageProps }) {
   };
   return (
     <>
-      <MaterialThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Component {...pageProps} themeChange={_handleThemeChange} />
-      </MaterialThemeProvider>
+      <AnimatePresence exitBeforeEnter={true}>
+        <MaterialThemeProvider theme={darkTheme}>
+          <style jsx global>
+            {`
+              html {
+                overflowx: hidden;
+              }
+            `}
+          </style>
+          <CssBaseline />
+          <Component {...pageProps} themeChange={_handleThemeChange} />
+        </MaterialThemeProvider>
+      </AnimatePresence>
     </>
   );
 }
