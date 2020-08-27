@@ -5,15 +5,21 @@ const Clock = (props) => {
   const [time, setTime] = useState({ min: 0, sec: 10 });
 
   useEffect(() => {
-    var timerID = setInterval(() => setNewTime(), 1000);
-    return function cleanup() {
-      clearInterval(timerID);
-    };
+    if (props.play) {
+      var timerID = setInterval(() => setNewTime(), 1000);
+      return function cleanup() {
+        clearInterval(timerID);
+      };
+    }
   });
 
-  // useEffect(() => {
-  //   console.log("Current time", time);
-  // });
+  useEffect(() => {
+    console.log("Clock -> props.resetTime", props.resetTime);
+    props.resetTime && setTime({ min: 0, sec: 10 });
+    props.resetTime && props.timeReset();
+
+    return () => {};
+  }, [props.resetTime]);
 
   const setNewTime = () => {
     console.log("Called setNewTime", time);
@@ -23,20 +29,26 @@ const Clock = (props) => {
     const newSeconds = sec === 0 ? 59 : sec - 1;
     console.log("setNewTime -> newSeconds", newSeconds);
     if (min === 0) {
-      newSeconds === 0 &&
-        props.timeOver() &&
+      if (newSeconds === 0) {
+        console.warn("Time should be over");
         setTime({
+          min: 0,
+          sec: 0,
+        });
+        props.timeOver();
+      } else {
+        setTime({
+          min: min,
           sec: newSeconds,
-        }) &&
-        clearInterval();
-      newSeconds !== 0 && setTime({ sec: newSeconds });
+        });
+      }
     } else {
       setTime({
-        min: newSeconds === 59 ? min - 1 : min,
+        min: newSeconds === 59 ? min - 1 : min ? min : 0,
         sec: newSeconds,
       });
       console.log("This is setini", {
-        min: newSeconds === 59 ? min - 1 : min,
+        min: newSeconds === 59 ? min - 1 : min ? min : 0,
         sec: newSeconds,
       });
     }
@@ -45,7 +57,8 @@ const Clock = (props) => {
   return (
     <>
       <Typography variant='h4' color='textPrimary' gutterBottom>
-        {(time && time.min) || "00"} : {(time && time.sec) || "00"}
+        {time.min < 10 ? `0${time.min}` : time.min} :{" "}
+        {time.sec < 10 ? `0${time.sec}` : time.sec}
       </Typography>
     </>
   );

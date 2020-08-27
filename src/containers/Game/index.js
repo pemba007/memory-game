@@ -5,10 +5,20 @@ import Grid from "@material-ui/core/Grid";
 
 import Clock from "../../components/Clock";
 import Tile from "../../components/Tile";
+import NewGame from "../../components/NewGame";
 import { motion } from "framer-motion";
 
 const Game = (props) => {
   const [level, setLevel] = useState(0);
+
+  const [playTime, setPlayTime] = useState(false);
+
+  const [resetTime, setResetTime] = useState(false);
+
+  const [justGameOver, setJustGameOver] = useState(false);
+
+  const [newGameModal, setNewGameModal] = useState(false);
+
   // const [timer, setTimer] = useState(null);
   const [cardData, setCardData] = useState([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
 
@@ -57,6 +67,23 @@ const Game = (props) => {
     setCardData(temp);
   };
 
+  useEffect(() => {
+    console.log("Reset Time updated", resetTime);
+  }, [resetTime]);
+
+  const resetLevel = () => {
+    console.log("Reset level called", resetTime);
+    setResetTime(true);
+    setLevel(0);
+    setPlayTime(false);
+    setCardData([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
+    setJustGameOver(false);
+    setOpenTiles([-1, -1]);
+    setShowData(new Array(10).fill(false));
+    setSolvedData(new Array(10).fill(false));
+    setNewGameModal(false);
+  };
+
   const newLevel = () => {
     const oldLevel = level;
     setLevel(level + 1);
@@ -87,12 +114,6 @@ const Game = (props) => {
     _randomizeData();
   }, []);
 
-  useEffect(() => {
-    console.log("Game -> showData", showData);
-    console.log("Game -> openTiles", openTiles);
-    console.log("Game -> solvedData", solvedData);
-  });
-
   const useStyles = makeStyles({
     mainContainer: {
       width: "95%",
@@ -117,83 +138,85 @@ const Game = (props) => {
     });
     console.log("SolvedData -> Game -> result", result);
     return result;
-    // result && newLevel();
   };
 
   const _handleTilePress = (id) => {
     console.log("_handleTilePress -> id", id);
-    if (openTiles[0] !== id && openTiles[1] !== id && !solvedData[id]) {
-      // Check if current open is equal to already opened
-      if (openTiles[1] !== -1) {
-        if (cardData[openTiles[1]] === cardData[id]) {
-          // Match
-          console.log("Match");
+    !justGameOver && !playTime && setPlayTime(true);
+    if (!justGameOver) {
+      if (openTiles[0] !== id && openTiles[1] !== id && !solvedData[id]) {
+        // Check if current open is equal to already opened
+        if (openTiles[1] !== -1) {
+          if (cardData[openTiles[1]] === cardData[id]) {
+            // Match
+            console.log("Match");
 
-          // Setting solved data
-          var tempS = [...solvedData];
-          tempS[openTiles[1]] = tempS[id] = true;
-          console.log("_handleTilePress -> temp", tempS);
+            // Setting solved data
+            var tempS = [...solvedData];
+            tempS[openTiles[1]] = tempS[id] = true;
+            console.log("_handleTilePress -> temp", tempS);
 
-          if (checkIfAllTrue(tempS)) {
-            newLevel();
+            if (checkIfAllTrue(tempS)) {
+              newLevel();
+            } else {
+              console.log("Not finished", tempS);
+
+              setSolvedData(tempS);
+              // Hiding openTiles[0]
+              temp = [...showData];
+              temp[openTiles[0]] = false;
+              setShowData(temp);
+              // Setting openTiles
+              let temp = [...openTiles];
+              temp[0] = temp[1] = -1;
+              setOpenTiles[temp];
+            }
           } else {
-            console.log("Not finished", tempS);
+            // No Match
 
-            setSolvedData(tempS);
-            // Hiding openTiles[0]
-            temp = [...showData];
-            temp[openTiles[0]] = false;
-            setShowData(temp);
-            // Setting openTiles
-            let temp = [...openTiles];
-            temp[0] = temp[1] = -1;
-            setOpenTiles[temp];
+            console.log("No Match");
+
+            // Closing openTiles[0] and opening tempArray[id]
+
+            if (openTiles[0] !== -1) {
+              let tempoArray = [...showData];
+              tempoArray[openTiles[0]] = false;
+              tempoArray[id] = true;
+              console.log("_handleTilePress -> tempoArray", tempoArray);
+              setShowData(tempoArray);
+            } else {
+              let tempoArray = [...showData];
+              tempoArray[id] = true;
+              setShowData(tempoArray);
+            }
+
+            // Setting open tiles
+
+            let tempArray = [...openTiles];
+            tempArray[0] = tempArray[1];
+            tempArray[1] = id;
+            // Assigning new open Tiles
+            setOpenTiles(tempArray);
           }
         } else {
-          // No Match
+          console.log("Initial or solved");
+          let tempoArray = [...showData];
+          tempoArray[id] = true;
 
-          console.log("No Match");
+          setShowData(tempoArray);
 
-          // Closing openTiles[0] and opening tempArray[id]
-
-          if (openTiles[0] !== -1) {
-            let tempoArray = [...showData];
-            tempoArray[openTiles[0]] = false;
-            tempoArray[id] = true;
-            console.log("_handleTilePress -> tempoArray", tempoArray);
-            setShowData(tempoArray);
-          } else {
-            let tempoArray = [...showData];
-            tempoArray[id] = true;
-            setShowData(tempoArray);
-          }
-
-          // Setting open tiles
-
-          let tempArray = [...openTiles];
-          tempArray[0] = tempArray[1];
-          tempArray[1] = id;
-          // Assigning new open Tiles
-          setOpenTiles(tempArray);
+          // Initial or after solve
+          let temp = [...openTiles];
+          temp[0] = temp[1];
+          temp[1] = id;
+          setOpenTiles(temp);
         }
-      } else {
-        console.log("Initial or solved");
-        let tempoArray = [...showData];
-        tempoArray[id] = true;
-
-        setShowData(tempoArray);
-
-        // Initial or after solve
-        let temp = [...openTiles];
-        temp[0] = temp[1];
-        temp[1] = id;
-        setOpenTiles(temp);
+      } else if (openTiles[0] === id && !solvedData[id]) {
+        let tempArray = [...openTiles];
+        tempArray[1] = tempArray[0];
+        tempArray[0] = openTiles[1];
+        setOpenTiles(tempArray);
       }
-    } else if (openTiles[0] === id && !solvedData[id]) {
-      let tempArray = [...openTiles];
-      tempArray[1] = tempArray[0];
-      tempArray[0] = openTiles[1];
-      setOpenTiles(tempArray);
     }
   };
 
@@ -226,6 +249,15 @@ const Game = (props) => {
 
   const _timeOver = () => {
     console.warn("Time has ended");
+    setNewGameModal(true);
+    setPlayTime(false);
+    setJustGameOver(true);
+  };
+
+  const _gameOver = () => {
+    // Game Over
+    setJustGameOver(true);
+    console.log("Game OVer");
   };
 
   const classes = useStyles(props);
@@ -233,7 +265,18 @@ const Game = (props) => {
   return (
     <div className={classes.mainContainer}>
       <Header />
-      <Clock timeOver={_timeOver} />
+      <NewGame
+        open={newGameModal}
+        handleClose={resetLevel}
+        level={level}
+        gameOver={_gameOver}
+      />
+      <Clock
+        timeOver={_timeOver}
+        play={playTime}
+        resetTime={resetTime}
+        timeReset={() => setResetTime(false)}
+      />
 
       {renderTiles()}
     </div>
