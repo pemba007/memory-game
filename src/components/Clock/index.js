@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 const Clock = (props) => {
-  const [time, setTime] = useState({ min: 3, sec: 0 });
+  const [time, setTime] = useState({ min: 1, sec: 0 });
 
   const [timeSet, setTimeSet] = useState(false);
 
@@ -21,7 +21,7 @@ const Clock = (props) => {
 
   useEffect(() => {
     console.log("Clock -> props.resetTime", props.resetTime);
-    props.resetTime && setTime({ min: 3, sec: 0 });
+    props.resetTime && setTime({ min: 1, sec: 0 });
     props.resetTime && props.timeReset();
     props.resetTime && setTimeSet(false);
 
@@ -64,7 +64,7 @@ const Clock = (props) => {
 
   const _clockStart = () => {
     console.log("Starting the clock");
-    setTime({ min: 3, sec: 0 });
+    setTime({ min: 1, sec: 0 });
 
     !props.justGameOver && props.handleClockStart();
     !props.justGameOver && setTimeSet(true);
