@@ -10,9 +10,9 @@ const readLeaderBoard = async () => {
         .orderByChild("level")
         .limitToLast(10)
         .on("child_added", function (snapshot) {
-          console.log(snapshot.val());
           dataArray.unshift(snapshot.val());
         });
+      console.log("readLeaderBoard -> dataArray", dataArray);
 
       resolve(dataArray);
     } catch (e) {

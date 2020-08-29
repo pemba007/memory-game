@@ -73,10 +73,6 @@ const Game = (props) => {
     console.log("Reset Time updated", resetTime);
   }, [resetTime]);
 
-  useEffect(() => {
-    router.prefetch("/leaderboard");
-  });
-
   const resetLevel = () => {
     console.log("Reset level called", resetTime);
     setResetTime(true);

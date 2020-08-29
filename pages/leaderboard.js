@@ -34,6 +34,7 @@ export async function getStaticProps() {
     console.log("Error happend on fetch");
     error = true;
   });
+  console.log("getStaticProps -> userData", userData);
 
   return {
     props: {
