@@ -4,8 +4,19 @@ import ThemeToggle from "../src/components/ThemeToggle";
 import LeaderBoard from "../src/containers/LeaderBoard";
 
 import readLeaderBoard from "../src/helpers/readLeaderBoard";
+import React from "react";
 
 export default function index(props) {
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(async () => {
+    const userData = await readLeaderBoard().catch(() => {
+      console.log("Error happend on fetch");
+      // error = true;
+    });
+    setData(userData);
+    console.log("getStaticProps -> userData", userData);
+  }, []);
   return (
     <>
       <Head>
@@ -21,24 +32,24 @@ export default function index(props) {
           minHeight: "100vh",
         }}
       >
-        <LeaderBoard userData={props.data ? props.data : null} />
+        <LeaderBoard userData={data ? data : null} />
       </main>
     </>
   );
 }
 
-export async function getStaticProps() {
-  // let error = false;
-  // Fetch necessary data for the blog post using params.id
-  const userData = await readLeaderBoard().catch(() => {
-    console.log("Error happend on fetch");
-    // error = true;
-  });
-  console.log("getStaticProps -> userData", userData);
+// export async function getStaticProps() {
+//   // let error = false;
+//   // Fetch necessary data for the blog post using params.id
+//   const userData = await readLeaderBoard().catch(() => {
+//     console.log("Error happend on fetch");
+//     // error = true;
+//   });
+//   console.log("getStaticProps -> userData", userData);
 
-  return {
-    props: {
-      data: userData,
-    },
-  };
-}
+//   return {
+//     props: {
+//       data: userData,
+//     },
+//   };
+// }
