@@ -10,22 +10,20 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
 import Link from "next/link";
 
-const useStyles = makeStyles({
-  table: {
-    // minWidth: 650,
-  },
-  grid: {
-    paddingTop: "2rem",
-  },
-});
+// const useStyles = makeStyles({
+//   table: {
+//     // minWidth: 650,
+//   },
+//   grid: {
+//     paddingTop: "2rem",
+//   },
+// });
 
 const LeaderBoard = ({ userData }) => {
-  const classes = useStyles();
-
   console.log("LeaderBoard -> userData", userData);
 
   return (
@@ -49,7 +47,12 @@ const LeaderBoard = ({ userData }) => {
         timeout={2500}
         style={{ transformOrigin: "bottom center" }}
       >
-        <Grid container spacing={3} justify='center' className={classes.grid}>
+        <Grid
+          container
+          spacing={3}
+          justify='center'
+          style={{ paddingTop: "2rem" }}
+        >
           <Grid item xs={10} sm={10} md={10} lg={10}>
             <TableContainer component={Paper}>
               <Table aria-label='simple table'>

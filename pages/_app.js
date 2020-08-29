@@ -16,7 +16,7 @@ Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
-if (env === "production") {
+if (process.env.NODE_ENV === "production") {
   console.log = function () {};
   console.warn = function () {};
 }
