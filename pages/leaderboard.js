@@ -32,7 +32,7 @@ export default function index(props) {
           minHeight: "100vh",
         }}
       >
-        <LeaderBoard userData={data ? data : null} />
+        <LeaderBoard userData={data ? data : []} />
       </main>
     </>
   );
