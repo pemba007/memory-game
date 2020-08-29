@@ -16,10 +16,10 @@ Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
-if (process.env.NODE_ENV === "production") {
-  console.log = function () {};
-  console.warn = function () {};
-}
+// if (process.env.NODE_ENV === "production") {
+//   console.log = function () {};
+//   console.warn = function () {};
+// }
 
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }) {
