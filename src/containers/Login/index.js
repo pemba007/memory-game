@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  paddedGrid: {
+    [theme.breakpoints.down("md")]: {
+      padding: "1rem",
+    },
+  },
 }));
 
 const Login = (props) => {
@@ -50,7 +55,7 @@ const Login = (props) => {
   };
 
   return (
-    <div>
+    <Grid className={classes.paddedGrid}>
       {!loginOn ? (
         <>
           <Grow
@@ -58,7 +63,12 @@ const Login = (props) => {
             timeout={2500}
             style={{ transformOrigin: "bottom center" }}
           >
-            <Typography variant='h2' color='textPrimary' gutterBottom>
+            <Typography
+              variant='h2'
+              color='textPrimary'
+              align='center'
+              gutterBottom
+            >
               Welcome to the Memory Game
             </Typography>
           </Grow>
@@ -128,7 +138,12 @@ const Login = (props) => {
             timeout={2500}
             style={{ transformOrigin: "bottom center" }}
           >
-            <Typography variant='h2' color='textPrimary' gutterBottom>
+            <Typography
+              variant='h2'
+              color='textPrimary'
+              align='center'
+              gutterBottom
+            >
               Please enter your id
             </Typography>
           </Grow>
@@ -185,7 +200,7 @@ const Login = (props) => {
           </form>
         </>
       )}
-    </div>
+    </Grid>
   );
 };
 
