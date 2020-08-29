@@ -28,17 +28,17 @@ export default function index(props) {
 }
 
 export async function getStaticProps() {
-  let error = false;
+  // let error = false;
   // Fetch necessary data for the blog post using params.id
   const userData = await readLeaderBoard().catch(() => {
     console.log("Error happend on fetch");
-    error = true;
+    // error = true;
   });
   console.log("getStaticProps -> userData", userData);
 
   return {
     props: {
-      data: error ? [] : userData,
+      data: userData,
     },
   };
 }
