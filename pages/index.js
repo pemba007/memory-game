@@ -13,8 +13,7 @@ export default function Home(props) {
   return (
     <>
       <Head>
-        <title>Create Next App</title>
-        <link rel='icon' href='/favicon.ico' />
+        <title>Memory Game</title>
       </Head>
       <ThemeToggle onChange={props.themeChange} />
       <main

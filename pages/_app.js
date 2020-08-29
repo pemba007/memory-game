@@ -5,13 +5,7 @@ import Router from "next/router";
 import { AnimatePresence } from "framer-motion";
 
 import React, { useState } from "react";
-// import {
-//   createMuiTheme,
-// makeStyles,
-// ThemeProvider,
-// } from "@material-ui/core/styles";
 
-// import ModeProvider from "../src/providers/ModeProvider";
 import { CssBaseline } from "@material-ui/core";
 import {
   ThemeProvider as MaterialThemeProvider,
@@ -22,9 +16,14 @@ Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
+if (env === "production") {
+  console.log = function () {};
+  console.warn = function () {};
+}
+
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }) {
-  const [darkState, setDarkState] = useState(false);
+  const [darkState, setDarkState] = useState(true);
   const palletType = darkState ? "dark" : "light";
   const darkTheme = createMuiTheme({
     palette: {

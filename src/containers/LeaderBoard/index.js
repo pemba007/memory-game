@@ -52,7 +52,7 @@ const LeaderBoard = ({ userData }) => {
         <Grid container spacing={3} justify='center' className={classes.grid}>
           <Grid item xs={10} sm={10} md={10} lg={10}>
             <TableContainer component={Paper}>
-              <Table className={classes.table} aria-label='simple table'>
+              <Table aria-label='simple table'>
                 <TableHead>
                   <TableRow>
                     <TableCell>User</TableCell>
