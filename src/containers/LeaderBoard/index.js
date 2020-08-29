@@ -10,20 +10,34 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-// import { makeStyles } from "@material-ui/core/styles";
+
+import readLeaderBoard from "../../helpers/readLeaderBoard";
 
 import Link from "next/link";
 
-// const useStyles = makeStyles({
-//   table: {
-//     // minWidth: 650,
-//   },
-//   grid: {
-//     paddingTop: "2rem",
-//   },
-// });
+const LeaderBoard = () => {
+  const [userData, setUserData] = React.useState([]);
+  const [, updateState] = React.useState();
 
-const LeaderBoard = ({ userData }) => {
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  React.useEffect(() => {
+    const getUserData = async () => {
+      const userData = await readLeaderBoard().catch(() => {
+        console.log("Error happend on fetch");
+        // error = true;
+      });
+      setUserData(userData);
+      console.log("LeaderBoard -> userData", userData);
+    };
+    getUserData();
+  }, []);
+
+  React.useEffect(() => {
+    console.log("User Data changed", userData);
+    forceUpdate();
+  }, [userData]);
+
   console.log("LeaderBoard -> userData", userData);
 
   return (
@@ -42,6 +56,7 @@ const LeaderBoard = ({ userData }) => {
           LeaderBoard
         </Typography>
       </Grow>
+
       <Grow
         in={true}
         timeout={2500}

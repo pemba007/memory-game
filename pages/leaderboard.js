@@ -9,13 +9,16 @@ import React from "react";
 export default function index(props) {
   const [data, setData] = React.useState([]);
 
-  React.useEffect(async () => {
-    const userData = await readLeaderBoard().catch(() => {
-      console.log("Error happend on fetch");
-      // error = true;
-    });
-    setData(userData);
-    console.log("getStaticProps -> userData", userData);
+  React.useEffect(() => {
+    const getUserData = async () => {
+      const userData = await readLeaderBoard().catch(() => {
+        console.log("Error happend on fetch");
+        // error = true;
+      });
+      setData(userData);
+      console.log("getStaticProps -> userData", userData);
+    };
+    getUserData();
   }, []);
   return (
     <>
