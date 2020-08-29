@@ -27,15 +27,31 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "100px",
     },
     [theme.breakpoints.down("sm")]: {
-      width: "50%",
+      width: "100%",
     },
     // position: "relative",
   },
   paperBack: {},
   tileContainer: {
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
+    display: "flex",
+    justifyContent: "center",
+
+    // },
     // position: "relative",
   },
-  tileBackContainer: {},
+  tileBackContainer: {
+    // [theme.breakpoints.down("sm")]: {
+    // width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
+    // },
+  },
 }));
 
 const variants = {
@@ -66,7 +82,9 @@ const Tile = (props) => {
       <Grid
         item
         lg
-        xs
+        md
+        sm
+        xs={6}
         onClick={() => props.tilePress(props.id)}
         style={{ display: "flex", justifyContent: "center" }}
       >

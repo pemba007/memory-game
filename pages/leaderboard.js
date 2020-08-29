@@ -3,6 +3,8 @@ import Head from "next/head";
 import ThemeToggle from "../src/components/ThemeToggle";
 import LeaderBoard from "../src/containers/LeaderBoard";
 
+import readLeaderBoard from "../src/helpers/readLeaderBoard";
+
 export default function index(props) {
   return (
     <>
@@ -19,12 +21,22 @@ export default function index(props) {
           minHeight: "100vh",
         }}
       >
-        <LeaderBoard />
+        <LeaderBoard userData={props.data ? props.data : null} />
       </main>
     </>
   );
 }
 
 export async function getStaticProps() {
+  let error = false;
   // Fetch necessary data for the blog post using params.id
+  const userData = await readLeaderBoard().catch(() => {
+    console.log("Error happend on fetch");
+    error = true;
+  });
+  return {
+    props: {
+      data: error ? [] : userData,
+    },
+  };
 }

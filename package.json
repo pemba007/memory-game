@@ -11,10 +11,12 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "firebase": "^7.19.1",
     "framer-motion": "^2.4.3-beta.2",
     "next": "9.4.4",
     "nprogress": "^0.2.0",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "uuid": "^8.3.0"
   }
 }

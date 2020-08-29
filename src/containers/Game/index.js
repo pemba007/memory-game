@@ -6,7 +6,9 @@ import Grid from "@material-ui/core/Grid";
 import Clock from "../../components/Clock";
 import Tile from "../../components/Tile";
 import NewGame from "../../components/NewGame";
+import writeLeaderBoard from "../../helpers/writeLeaderBoard";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const Game = (props) => {
   const [level, setLevel] = useState(0);
@@ -71,12 +73,16 @@ const Game = (props) => {
     console.log("Reset Time updated", resetTime);
   }, [resetTime]);
 
+  useEffect(() => {
+    router.prefetch("/leaderboard");
+  });
+
   const resetLevel = () => {
     console.log("Reset level called", resetTime);
     setResetTime(true);
     setLevel(0);
     setPlayTime(false);
-    setCardData([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
+    _randomizeData([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
     setJustGameOver(false);
     setOpenTiles([-1, -1]);
     setShowData(new Array(10).fill(false));
@@ -121,16 +127,18 @@ const Game = (props) => {
     },
   });
 
-  const Header = () => (
-    <>
-      <Typography variant='h4' color='textPrimary' gutterBottom>
-        Memory Game
-      </Typography>
-      <Typography variant='subtitle1' align='center' gutterBottom>
-        Find the pairs
-      </Typography>
-    </>
-  );
+  const Header = React.memo((props) => {
+    return (
+      <>
+        <Typography variant='h4' color='textPrimary' gutterBottom>
+          Memory Game
+        </Typography>
+        <Typography variant='subtitle1' align='center' gutterBottom>
+          Find the pairs
+        </Typography>
+      </>
+    );
+  });
 
   const checkIfAllTrue = (arr) => {
     let result = arr.every(function (e) {
@@ -142,8 +150,11 @@ const Game = (props) => {
 
   const _handleTilePress = (id) => {
     console.log("_handleTilePress -> id", id);
-    !justGameOver && !playTime && setPlayTime(true);
-    if (!justGameOver) {
+    console.log("_handleTilePress -> justGameOver", justGameOver);
+    console.log("_handleTilePress -> playTime", playTime);
+
+    if (!justGameOver && playTime) {
+      console.log("Here");
       if (openTiles[0] !== id && openTiles[1] !== id && !solvedData[id]) {
         // Check if current open is equal to already opened
         if (openTiles[1] !== -1) {
@@ -217,6 +228,9 @@ const Game = (props) => {
         tempArray[0] = openTiles[1];
         setOpenTiles(tempArray);
       }
+    } else if (!justGameOver && !playTime) {
+      // console.log("Do nothing");
+      // setPlayTime(true);
     }
   };
 
@@ -252,15 +266,26 @@ const Game = (props) => {
     setNewGameModal(true);
     setPlayTime(false);
     setJustGameOver(true);
+    writeLeaderBoard({ username: props.user, level: level + 1 }).catch(() =>
+      console.log("nothing happen")
+    );
   };
 
   const _gameOver = () => {
     // Game Over
     setJustGameOver(true);
+    // setEndGame(true);
     console.log("Game OVer");
+    router.push("/leaderboard");
+  };
+
+  const _handleClockStart = () => {
+    !justGameOver && !playTime && setPlayTime(true);
   };
 
   const classes = useStyles(props);
+
+  const router = useRouter();
 
   return (
     <div className={classes.mainContainer}>
@@ -276,6 +301,8 @@ const Game = (props) => {
         play={playTime}
         resetTime={resetTime}
         timeReset={() => setResetTime(false)}
+        handleClockStart={_handleClockStart}
+        justGameOver={justGameOver}
       />
 
       {renderTiles()}

@@ -7,7 +7,9 @@ import {
   Snackbar,
   Slide,
   Grow,
+  Grid,
 } from "@material-ui/core";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,22 +73,53 @@ const Login = (props) => {
               most common pairs
             </Typography>
           </Grow>
-          <Grow
-            in={true}
-            timeout={2500}
-            style={{ transformOrigin: "bottom center" }}
-          >
-            <Button
-              color='primary'
-              variant='contained'
-              aria-label='Start Game'
-              style={{ display: "block", margin: "auto", marginTop: "2rem" }}
-              size='large'
-              onClick={() => setLoginOn(true)}
-            >
-              Play Now
-            </Button>
-          </Grow>
+          <Grid container spacing={3} justify='center'>
+            <Grid item>
+              <Grow
+                in={true}
+                timeout={2500}
+                style={{ transformOrigin: "bottom center" }}
+              >
+                <Button
+                  color='primary'
+                  variant='contained'
+                  aria-label='Start Game'
+                  style={{
+                    display: "block",
+                    margin: "auto",
+                    marginTop: "2rem",
+                  }}
+                  size='large'
+                  onClick={() => setLoginOn(true)}
+                >
+                  Play Now
+                </Button>
+              </Grow>
+            </Grid>
+            <Grid item>
+              <Link href='/leaderboard'>
+                <Grow
+                  in={true}
+                  timeout={2500}
+                  style={{ transformOrigin: "bottom center" }}
+                >
+                  <Button
+                    variant='outlined'
+                    color='secondary'
+                    aria-label='See Leaderboard'
+                    style={{
+                      display: "block",
+                      margin: "auto",
+                      marginTop: "2rem",
+                    }}
+                    size='large'
+                  >
+                    See LeaderBoard
+                  </Button>
+                </Grow>
+              </Link>
+            </Grid>
+          </Grid>
         </>
       ) : (
         <>

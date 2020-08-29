@@ -45,7 +45,7 @@ export default function MyApp({ Component, pageProps }) {
           <style jsx global>
             {`
               html {
-                overflowx: hidden;
+                overflowx: hidden !important;
               }
             `}
           </style>

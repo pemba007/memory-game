@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 const Clock = (props) => {
-  const [time, setTime] = useState({ min: 0, sec: 10 });
+  const [time, setTime] = useState({ min: 3, sec: 0 });
+
+  const [timeSet, setTimeSet] = useState(false);
 
   useEffect(() => {
-    if (props.play) {
+    console.log("Clock use effect called");
+    if (timeSet) {
+      console.log("Setting time");
       var timerID = setInterval(() => setNewTime(), 1000);
+      // setTimeSet(true);
       return function cleanup() {
         clearInterval(timerID);
       };
     }
-  });
+  }, [time]);
 
   useEffect(() => {
     console.log("Clock -> props.resetTime", props.resetTime);
-    props.resetTime && setTime({ min: 0, sec: 10 });
+    props.resetTime && setTime({ min: 3, sec: 0 });
     props.resetTime && props.timeReset();
+    props.resetTime && setTimeSet(false);
 
     return () => {};
   }, [props.resetTime]);
@@ -35,6 +42,7 @@ const Clock = (props) => {
           min: 0,
           sec: 0,
         });
+        setTimeSet(false);
         props.timeOver();
       } else {
         setTime({
@@ -54,12 +62,26 @@ const Clock = (props) => {
     }
   };
 
+  const _clockStart = () => {
+    console.log("Starting the clock");
+    setTime({ min: 3, sec: 0 });
+
+    !props.justGameOver && props.handleClockStart();
+    !props.justGameOver && setTimeSet(true);
+  };
+
   return (
     <>
-      <Typography variant='h4' color='textPrimary' gutterBottom>
-        {time.min < 10 ? `0${time.min}` : time.min} :{" "}
-        {time.sec < 10 ? `0${time.sec}` : time.sec}
-      </Typography>
+      {timeSet ? (
+        <Typography variant='h4' color='textPrimary' gutterBottom>
+          {time.min < 10 ? `0${time.min}` : time.min} :{" "}
+          {time.sec < 10 ? `0${time.sec}` : time.sec}
+        </Typography>
+      ) : (
+        <Button variant='contained' color='primary' onClick={_clockStart}>
+          Start Clock
+        </Button>
+      )}
     </>
   );
 };
